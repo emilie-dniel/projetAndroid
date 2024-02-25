@@ -154,7 +154,7 @@ class BluetoothController(val autoPairFlag: Boolean = false) {
         status = Status.Disconnected(btHidDevice)
     }
 
-    // Définissez l'ID du rapport HID utilisé pour envoyer des données
+    //ID du rapport HID utilisé pour envoyer des données
     private val HID_REPORT_ID = 1
 
     fun sendCommandToDevice(command: String) {
