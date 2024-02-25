@@ -162,6 +162,12 @@ fun BluetoothDesk(bluetoothController: BluetoothController) {
                 Button(onClick = {press(Shortcut(KeyEvent.KEYCODE_F,listOf(Shortcut.LEFT_CONTROL, Shortcut.LEFT_GUI)))}) {
                     Text("full screen")
                 }
+
+                Button(onClick = {
+                    bluetoothController.sendCommandToDevice("OpenSpotify") // Appel de la fonction sendCommandToDevice avec la commande "OpenSpotify"
+                }) {
+                    Text(text = "Open Spotify on connected device")
+                }
             }
         }
 }

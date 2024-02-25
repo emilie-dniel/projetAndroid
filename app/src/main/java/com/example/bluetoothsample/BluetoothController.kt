@@ -153,4 +153,37 @@ class BluetoothController(val autoPairFlag: Boolean = false) {
         btHidDevice?.disconnect(hostDevice)
         status = Status.Disconnected(btHidDevice)
     }
+
+    // Définissez l'ID du rapport HID utilisé pour envoyer des données
+    private val HID_REPORT_ID = 1
+
+    fun sendCommandToDevice(command: String) {
+        val isConnected = status is Status.Connected
+
+        if (isConnected) {
+            hostDevice?.let { device ->
+                // Vérifiez si le service BluetoothHidDevice est disponible
+                val bluetoothProfile = bluetoothManager.getConnectedDevices(BluetoothProfile.HID_DEVICE)
+                if (bluetoothProfile.isNotEmpty()) {
+                    val hidDevice = bluetoothProfile[0] as BluetoothHidDevice
+
+                    // Convertissez la commande en tableau de bytes selon le format attendu par l'appareil Bluetooth
+                    val commandBytes = command.toByteArray(Charsets.UTF_8)
+
+                    // Envoyez les données à l'appareil Bluetooth
+                    val sentSuccessfully = hidDevice.sendReport(device, HID_REPORT_ID, commandBytes)
+                    if (sentSuccessfully) {
+                        Log.d(TAG, "Command sent successfully: $command")
+                    } else {
+                        Log.e(TAG, "Failed to send command: $command")
+                    }
+                } else {
+                    Log.e(TAG, "BluetoothHidDevice service not available")
+                }
+            }
+        } else {
+            Log.e(TAG, "Bluetooth not connected")
+        }
+    }
+
 }
